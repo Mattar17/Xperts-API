@@ -27,8 +27,6 @@ const sendEmail = async (email) => {
     text: "Hello world?",
     html: `<p>Your verification code is <em>${code}</em></p>`, // plain‑text body
   });
-
-  console.log("Message sent:", info.messageId);
 };
 
 module.exports = sendEmail;

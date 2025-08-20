@@ -1,10 +1,11 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const authRouter = require("./routers/auth.router");
+const appRouter = require("./routers/app.router");
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded());
 
 mongoose
   .connect(process.env.DEV_CONNECTION_STRING)
@@ -15,7 +16,7 @@ mongoose
     console.log(err);
   });
 
-app.use("/api/auth", authRouter);
+app.use("/", appRouter);
 
 app.get("/", (req, res) => {
   res.json("express is running!!!!");

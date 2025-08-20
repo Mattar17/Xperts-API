@@ -27,7 +27,6 @@ const Login = async (req, res) => {
       process.env.JWT_PRIVATE_KEY,
       { expiresIn: "2d" }
     );
-    console.log(token);
     return res.status(200).json({ status: "success", token });
   } catch (error) {
     return res.status(500).json("Error Happened");
@@ -40,7 +39,6 @@ const Register = async (req, res) => {
 
   try {
     const newUser = req.body;
-    console.log(newUser);
     await userModel.insertOne(newUser);
     res.status(200).json({ status: "success", data: newUser });
   } catch (error) {
