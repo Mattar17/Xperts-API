@@ -1,0 +1,42 @@
+What is Xpert Blog?
+
+Xpert blog is a web based application that allows users to ask experts from all fields (e.g Doctors,Engineers,Designers, Programmers etc)
+
+- users posts a question experts posts an article  
+- only experts are allowed to comment (answer) the users posts (questions) 
+- the admin only have the right to give an expert role to someone
+- experts can attach media to their posts and users can download it 
+
+
+A user can : 
+ Mandatory:
+1- Login with email,password  [Done]
+2- Create account with email , name , password [Done] 
+5- modify his account: name , password , email , profile picture,Bio [Ongoing]
+3- See posts on the blog and like it 
+4- create,Delete,Modify a post with (title(optional),content,date,category) after verifying email
+6- Apply as an expert (category,Documents (pdf,jpg,links)) after verifying email
+7- search for expert or a post 
+8- View other users Profile 
+9- Filter posts by category
+
+ Nice to have:
+1- follow an expert 
+2- get notifictions
+3- reset password 
+4- Login with Google and social media
+
+
+expert can:
+ Mandatory:
+1- Comment on others post in the same category as his experties
+2- Delete and Update his comment
+
+An Admin can:
+ Mandatory:
+1-Delete users and posts
+2-Get a list of expert requests
+3-accept or decline expert requests
+
+Super Admin :
+Gets access to Add,delete admin roles with a Secret Key

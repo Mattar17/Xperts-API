@@ -13,6 +13,6 @@ router.post(
   authController.sendVerificationCode
 );
 
-router.post("/verify-email", authenticate, authController.verifyEmail);
+router.patch("/verify-email", authenticate, authController.verifyEmail);
 
 module.exports = router;
