@@ -17,6 +17,9 @@ mongoose
   });
 
 app.use("/", appRouter);
+app.use((req, res, next) => {
+  res.status(404).json("resource not found");
+});
 
 app.get("/", (req, res) => {
   res.json("express is running!!!!");
