@@ -12,9 +12,8 @@ A user can :
  Mandatory:
 1- Login with email,password  [Done]
 2- Create account with email , name , password [Done] 
-5- modify his account: name , password , email , profile picture,Bio [Ongoing]
-3- See posts on the blog and like it 
-4- create,Delete,Modify a post with (title(optional),content,date,category) after verifying email
+5- modify his account: name , password , profile picture [Done] 
+4- create,Delete,Modify a post with (title(optional),content,date,category) after verifying email [Ongoing]🔴🔴
 6- Apply as an expert (category,Documents (pdf,jpg,links)) after verifying email
 7- search for expert or a post 
 8- View other users Profile 
@@ -29,6 +28,7 @@ A user can :
 
 expert can:
  Mandatory:
+1- Create,Edit,Delete posts related to his field 
 1- Comment on others post in the same category as his experties
 2- Delete and Update his comment
 
