@@ -4,14 +4,17 @@ const userModel = require("../models/user.model");
 const getAllPosts = async function (req, res) {
   try {
     const page = req.query.page || 1;
-    console.log(page);
     const limit = 15;
     const skip = (+page - 1) * limit;
+    const categoryFilter = req.query.filter;
+    const query = categoryFilter ? { category: categoryFilter } : {};
+
     const posts = await postModel
-      .find({})
+      .find(query)
       .populate("author", ["name", "pfp_url"])
       .limit(limit)
       .skip(skip);
+
     if (!posts || posts.length === 0) res.status(404).json("no posts");
     res.status(200).json({ status: "success", posts });
   } catch (error) {
