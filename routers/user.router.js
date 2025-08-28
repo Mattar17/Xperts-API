@@ -12,5 +12,11 @@ router.patch(
 );
 router.patch("/change-name", authenticate, userController.changeName);
 router.patch("/reset-password", authenticate, userController.resetPassword);
+router.post(
+  "/expert-application",
+  authenticate,
+  uploadFile.upload.array("documents", 5),
+  userController.applyAsExpert
+);
 
 module.exports = router;

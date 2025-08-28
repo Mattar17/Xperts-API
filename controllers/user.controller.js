@@ -1,6 +1,7 @@
 const uploadImage = require("../utils/uploadImage");
 const userModel = require("../models/user.model");
 const codeModel = require("../models/code.model");
+const expertApplicationModel = require("../models/expertApplication.model");
 
 const setProfilePicture = async function (req, res) {
   try {
@@ -8,7 +9,8 @@ const setProfilePicture = async function (req, res) {
 
     const picture_url = await uploadImage.uploadImage(
       req.file.buffer,
-      req.file.mimetype
+      req.file.mimetype,
+      "Xperts/user_pictures"
     );
 
     await userModel.updateOne(
@@ -59,8 +61,44 @@ const resetPassword = async function (req, res) {
   }
 };
 
+const applyAsExpert = async function (req, res) {
+  try {
+    console.log(req.files.length);
+    if (req.files.length < 1)
+      return res
+        .status(403)
+        .json({ status: "FAIL", Error: "Upload at least one file" });
+
+    if (!req.body.field || req.body.field === "") {
+      return res.status(403).json("Field cannot be left empty");
+    }
+
+    // upload files to cloudinary + add their links to array
+    const documentLinks = await Promise.all(
+      req.files.map((f) =>
+        uploadImage.uploadImage(f.buffer, f.mimetype, "Xperts/documents")
+      )
+    );
+
+    const user = await userModel.findOne({ email: req.currentUser.email });
+    await expertApplicationModel.insertOne({
+      applicant: user,
+      documents: documentLinks,
+      fields: req.body.field,
+    });
+
+    return res
+      .status(200)
+      .json({ status: "SUCCESS", documents: documentLinks });
+  } catch (error) {
+    if (error.name === "ValidationError") res.status(403).json(error.message);
+    res.status(500).json("Error Happened in server");
+  }
+};
+
 module.exports = {
   setProfilePicture,
   changeName,
   resetPassword,
+  applyAsExpert,
 };

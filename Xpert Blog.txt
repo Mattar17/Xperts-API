@@ -22,13 +22,11 @@ A user can :
  Nice to have:
 1- follow an expert 
 2- get notifictions
-3- reset password 
 4- Login with Google and social media
 
 
 expert can:
  Mandatory:
-1- Create,Edit,Delete posts related to his field 
 1- Comment on others post in the same category as his experties
 2- Delete and Update his comment
 

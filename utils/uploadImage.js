@@ -9,25 +9,26 @@ cloudinary.config({
 
 const storage = multer.memoryStorage();
 const fileFilter = (req, file, cb) => {
-  const allowedMimes = ["image/png", "image/jpg", "image/jpeg"];
+  const allowedMimes = [
+    "image/png",
+    "image/jpg",
+    "image/jpeg",
+    "application/pdf",
+  ];
 
   if (allowedMimes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("only .jbg .jpeg .png are accepted"));
+    cb(new Error("only .jbg .jpeg .png .pdf are accepted"));
   }
 };
 const upload = multer({
   storage,
   fileFilter,
-  limit: { fileSize: 5 * 1024 * 1024 },
+  limit: { fileSize: 10 * 1024 * 1024 },
 });
 
-const uploadImage = async function (
-  buffer,
-  mimetype,
-  folder = "Xperts/users_pictures"
-) {
+const uploadImage = async function (buffer, mimetype, folder) {
   try {
     const buffer64 = buffer.toString("base64");
     const dataURI = `data:${mimetype};base64,${buffer64}`;

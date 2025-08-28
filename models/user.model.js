@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const fields = require("../utils/fields");
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -22,7 +23,7 @@ const userSchema = new mongoose.Schema({
   },
   expertIn: {
     type: String,
-    enum: ["", "engineering", "medical", "computer sceince", "graphic design"],
+    enum: fields,
     default: "",
   },
   isEmailVerified: {
