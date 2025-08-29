@@ -15,7 +15,7 @@ A user can :
 5- modify his account: name , password , profile picture [Done] 
 4- create,Delete,Modify a post with (title(optional),content,date,category) after verifying email [Done]
 9- Filter posts by category [Done]
-6- Apply as an expert (category,Documents (pdf,jpg,links)) after verifying email
+6- Apply as an expert (category,Documents (pdf,jpg,links)) after verifying email [Done]
 7- search for expert or a post 
 8- View other users Profile 
 

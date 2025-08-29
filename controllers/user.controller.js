@@ -69,8 +69,8 @@ const applyAsExpert = async function (req, res) {
         .status(403)
         .json({ status: "FAIL", Error: "Upload at least one file" });
 
-    if (!req.body.field || req.body.field === "") {
-      return res.status(403).json("Field cannot be left empty");
+    if (!req.body.category || req.body.category === "") {
+      return res.status(403).json("category Field cannot be left empty");
     }
 
     // upload files to cloudinary + add their links to array
@@ -84,7 +84,7 @@ const applyAsExpert = async function (req, res) {
     await expertApplicationModel.insertOne({
       applicant: user,
       documents: documentLinks,
-      fields: req.body.field,
+      category: req.body.category,
     });
 
     return res

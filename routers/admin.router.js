@@ -7,8 +7,9 @@ const adminOnly = require("../middlewares/adminOnly");
 router.get(
   "/experts-applications",
   authenticate,
-  adminOnly,
+  //adminOnly,
   adminController.getExpertsApplication
 );
+router.put("/accept-application", adminController.acceptApplication);
 
 module.exports = router;

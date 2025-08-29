@@ -9,7 +9,7 @@ const applicationSchema = new mongoose.Schema({
   documents: {
     type: [String],
   },
-  field: {
+  category: {
     type: String,
     enum: fields,
   },
