@@ -13,6 +13,10 @@ const applicationSchema = new mongoose.Schema({
     type: String,
     enum: fields,
   },
+  creationDate: {
+    type: Date,
+    default: new Date(),
+  },
 });
 
 module.exports = mongoose.model("Expert_Application", applicationSchema);

@@ -33,7 +33,31 @@ const acceptApplication = async function (req, res) {
   }
 };
 
+const getAllUsers = async function (req, res) {
+  try {
+    const users = await userModel.find();
+    if (!users) res.status(404).json("No users found");
+
+    return res.status(200).json({ status: "success", data: users });
+  } catch (error) {
+    res.status(500).json("Error");
+  }
+};
+
+const deleteUser = async function (req, res) {
+  try {
+    const user = await userModel.findById(req.query._id);
+    if (!user) return res.status(404).json("No user Found");
+
+    await user.deleteOne();
+    return res.status(200).json({ status: "success" });
+  } catch (error) {
+    return res.status(500).json("server Error");
+  }
+};
 module.exports = {
   getExpertsApplication,
   acceptApplication,
+  getAllUsers,
+  deleteUser,
 };

@@ -10,6 +10,12 @@ router.get(
   //adminOnly,
   adminController.getExpertsApplication
 );
-router.put("/accept-application", adminController.acceptApplication);
+router.get("/users", authenticate, adminController.getAllUsers);
+router.put(
+  "/accept-application",
+  authenticate,
+  adminController.acceptApplication
+);
+router.delete("/users", authenticate, adminController.deleteUser);
 
 module.exports = router;
