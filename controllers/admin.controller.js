@@ -55,9 +55,38 @@ const deleteUser = async function (req, res) {
     return res.status(500).json("server Error");
   }
 };
+
+const toggleAdminRole = async function (req, res) {
+  try {
+    const user = await userModel.findById(req.query._id);
+    if (!user)
+      return res
+        .status(404)
+        .json({ status: "fail", message: "user isn't found" });
+
+    if (user.isAdmin) {
+      user.isAdmin = false;
+      user.save();
+      return res
+        .status(200)
+        .json({ status: "success", message: "user is back to normal user" });
+    } else {
+      user.isAdmin = true;
+      user.save();
+
+      return res
+        .status(200)
+        .json({ status: "success", message: "user is updated to admin" });
+    }
+  } catch (error) {
+    return res.status(500).json({ status: "fail" });
+  }
+};
+
 module.exports = {
   getExpertsApplication,
   acceptApplication,
   getAllUsers,
   deleteUser,
+  toggleAdminRole,
 };
