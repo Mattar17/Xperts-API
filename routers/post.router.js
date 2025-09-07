@@ -26,5 +26,7 @@ router.delete(
 );
 router.get("/comments", commentController.getComments);
 router.post("/comments", authenticate, commentController.createComment);
+router.patch("/comments", authenticate, commentController.updateComment);
+router.delete("/comments", authenticate, commentController.deleteComment);
 
 module.exports = router;
