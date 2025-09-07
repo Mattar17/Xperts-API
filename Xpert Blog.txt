@@ -32,7 +32,7 @@ expert can:
 
 An Admin can:
  Mandatory:
-1-Delete users and posts 
+1-Delete users and posts [Done]
 2-Get a list of expert requests [Done]
 3-accept or decline expert requests [Done]
 
@@ -40,4 +40,4 @@ An Admin can:
 1- mark deleted posts by admin
 
 Super Admin :
-Gets access to Add,delete admin roles with a Secret Key
+Gets access to Add,delete admin roles with a Secret Key [Done]

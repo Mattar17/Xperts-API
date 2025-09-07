@@ -23,7 +23,10 @@ const acceptApplication = async function (req, res) {
     if (!application) return res.status(404).json("Not Found");
 
     const applicant = await userModel.findById(application.applicant._id);
+    console.log(applicant, application.category);
     applicant.expertIn = application.category;
+
+    await applicant.save();
 
     return res
       .status(200)

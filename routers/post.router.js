@@ -3,6 +3,7 @@ const router = express.Router();
 const authenticate = require("../middlewares/authenticate");
 const isEmailVerified = require("../middlewares/isEmailVerified");
 const postController = require("../controllers/post.controller");
+const commentController = require("../controllers/comment.controller");
 
 router.get("/", postController.getAllPosts);
 router.post(
@@ -23,5 +24,7 @@ router.delete(
   isEmailVerified,
   postController.deletePost
 );
+router.get("/comments", commentController.getComments);
+router.post("/comments", authenticate, commentController.createComment);
 
 module.exports = router;

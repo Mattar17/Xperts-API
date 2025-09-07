@@ -96,9 +96,18 @@ const applyAsExpert = async function (req, res) {
   }
 };
 
+const searchForUser = async function (req, res) {
+  const user = await userModel.find({
+    name: { $regex: new RegExp(`^${req.query.name}`) },
+  });
+  if (!user || user.length === 0) res.json("no user");
+  res.json(user);
+};
+
 module.exports = {
   setProfilePicture,
   changeName,
   resetPassword,
   applyAsExpert,
+  searchForUser,
 };

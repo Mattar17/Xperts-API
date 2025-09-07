@@ -11,7 +11,8 @@ const getAllPosts = async function (req, res) {
 
     const posts = await postModel
       .find(query)
-      .populate("author", ["name", "pfp_url"])
+      .populate("author", "name pfp_url")
+      .populate("comments.author", "name pfp_url creationDate")
       .limit(limit)
       .skip(skip);
 

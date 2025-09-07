@@ -18,5 +18,6 @@ router.post(
   uploadFile.upload.array("documents", 5),
   userController.applyAsExpert
 );
+router.get("/", userController.searchForUser);
 
 module.exports = router;
