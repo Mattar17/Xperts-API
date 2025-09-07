@@ -104,10 +104,23 @@ const searchForUser = async function (req, res) {
   res.json(user);
 };
 
+const viewUserProfile = async function (req, res) {
+  try {
+    const user = await userModel
+      .findById(req.params.id)
+      .select("-password -_id -__v");
+    if (!user) return res.status(404).json("User not found");
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json("Error Happened in server");
+  }
+};
+
 module.exports = {
   setProfilePicture,
   changeName,
   resetPassword,
   applyAsExpert,
   searchForUser,
+  viewUserProfile,
 };

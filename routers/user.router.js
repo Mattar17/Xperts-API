@@ -19,5 +19,6 @@ router.post(
   userController.applyAsExpert
 );
 router.get("/", userController.searchForUser);
+router.get("/profile/:id", userController.viewUserProfile);
 
 module.exports = router;

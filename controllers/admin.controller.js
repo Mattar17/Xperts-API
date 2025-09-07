@@ -24,6 +24,7 @@ const acceptApplication = async function (req, res) {
 
     const applicant = await userModel.findById(application.applicant._id);
     applicant.expertIn = application.category;
+    applicant.documents = application.documents;
 
     await applicant.save();
 

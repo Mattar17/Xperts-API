@@ -16,7 +16,7 @@ A user can :
 4- create,Delete,Modify a post with (title(optional),content,date,category) after verifying email [Done]
 9- Filter posts by category [Done]
 6- Apply as an expert (category,Documents (pdf,jpg,links)) after verifying email [Done]
-7- search for expert or a post 
+7- search for expert or a post[Done] 
 8- View other users Profile 
 
  Nice to have:
@@ -27,8 +27,8 @@ A user can :
 
 expert can:
  Mandatory:
-1- Comment on others post in the same category as his experties
-2- Delete and Update his comment
+1- Comment on others post in the same category as his experties[Done]
+2- Delete and Update his comment[Done]
 
 An Admin can:
  Mandatory:
