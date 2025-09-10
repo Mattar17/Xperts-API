@@ -5,7 +5,7 @@ const expertApplicationModel = require("../models/expertApplication.model");
 
 const setProfilePicture = async function (req, res) {
   try {
-    if (!req.file) res.json("file is required");
+    if (!req.file) res.json({ status: "error", message: "file is required" });
 
     const picture_url = await uploadImage.uploadImage(
       req.file.buffer,
@@ -18,10 +18,15 @@ const setProfilePicture = async function (req, res) {
       { $set: { pfp_url: picture_url } }
     );
 
-    res.status(200).json(`picture uploaded successfully url:${picture_url}`);
+    res
+      .status(200)
+      .json({
+        status: "success",
+        message: `picture uploaded successfully url:${picture_url}`,
+      });
   } catch (error) {
     console.log(error);
-    res.json("photo not uploaded");
+    res.json({ status: "error", message: "photo not uploaded" });
   }
 };
 
@@ -32,9 +37,11 @@ const changeName = async function (req, res) {
       { email: req.currentUser.email },
       { $set: { name: req.body.newName } }
     );
-    res.status(200).json("Name is updated");
+    res.status(200).json({ status: "success", message: "Name is updated" });
   } catch (error) {
-    res.status(500).json("Error happened please try again!!");
+    res
+      .status(500)
+      .json({ status: "error", message: "Error happened please try again!!" });
   }
 };
 
@@ -43,21 +50,28 @@ const resetPassword = async function (req, res) {
     const model = await codeModel
       .findOne({ email: req.currentUser.email })
       .sort({ _id: -1 });
-    if (!model) res.status(403).json("No code is requested!");
+    if (!model)
+      res
+        .status(403)
+        .json({ status: "error", message: "No code is requested!" });
     if ((model.expiresAt - new Date().getTime()) / (1000 * 60) > 15)
-      res.status(403).json("Code is expired");
+      res.status(403).json({ status: "error", message: "Code is expired" });
     if (req.body.code !== model.code)
-      res.status(403).json("Code is not correct!");
-    const user = await userModel.findOne({ email: req.currentUser.email });
+      res
+        .status(403)
+        .json({ status: "error", message: "Code is not correct!" });
+    const user = await userModel.findById(req.currentUser._id);
 
     if (user.password === req.body.newPassword)
-      res.status(403).json("You can't enter the old password");
+      res
+        .status(403)
+        .json({ status: "error", message: "You can't enter the old password" });
 
     await user.updateOne({ $set: { password: req.body.newPassword } });
 
-    res.status(200).json("password Changed");
+    res.status(200).json({ status: "success", message: "password Changed" });
   } catch (error) {
-    res.status(500).json("Try Again!!");
+    res.status(500).json({ status: "error", message: "Try Again!!" });
   }
 };
 
@@ -67,10 +81,15 @@ const applyAsExpert = async function (req, res) {
     if (req.files.length < 1)
       return res
         .status(403)
-        .json({ status: "FAIL", Error: "Upload at least one file" });
+        .json({ status: "error", message: "Upload at least one file" });
 
     if (!req.body.category || req.body.category === "") {
-      return res.status(403).json("category Field cannot be left empty");
+      return res
+        .status(403)
+        .json({
+          status: "error",
+          message: "category Field cannot be left empty",
+        });
     }
 
     // upload files to cloudinary + add their links to array
@@ -80,7 +99,7 @@ const applyAsExpert = async function (req, res) {
       )
     );
 
-    const user = await userModel.findOne({ email: req.currentUser.email });
+    const user = await userModel.findById(req.currentUser._id);
     await expertApplicationModel.insertOne({
       applicant: user,
       documents: documentLinks,
@@ -89,10 +108,13 @@ const applyAsExpert = async function (req, res) {
 
     return res
       .status(200)
-      .json({ status: "SUCCESS", documents: documentLinks });
+      .json({ status: "success", documents: documentLinks });
   } catch (error) {
-    if (error.name === "ValidationError") res.status(403).json(error.message);
-    res.status(500).json("Error Happened in server");
+    if (error.name === "ValidationError")
+      res.status(403).json({ status: "error", message: error.message });
+    res
+      .status(500)
+      .json({ status: "error", message: "Error Happened in server" });
   }
 };
 
@@ -100,8 +122,9 @@ const searchForUser = async function (req, res) {
   const user = await userModel.find({
     name: { $regex: new RegExp(`^${req.query.name}`) },
   });
-  if (!user || user.length === 0) res.json("no user");
-  res.json(user);
+  if (!user || user.length === 0)
+    return res.json({ status: "error", message: "no user found" });
+  return res.status(200).json({ status: "success", data: user });
 };
 
 const viewUserProfile = async function (req, res) {
@@ -109,10 +132,15 @@ const viewUserProfile = async function (req, res) {
     const user = await userModel
       .findById(req.params.id)
       .select("-password -_id -__v");
-    if (!user) return res.status(404).json("User not found");
-    res.status(200).json(user);
+    if (!user)
+      return res
+        .status(404)
+        .json({ status: "error", message: "User not found" });
+    return res.status(200).json({ status: "success", data: user });
   } catch (error) {
-    res.status(500).json("Error Happened in server");
+    return res
+      .status(500)
+      .json({ status: "error", message: "Error Happened in server" });
   }
 };
 

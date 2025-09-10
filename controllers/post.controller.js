@@ -16,47 +16,55 @@ const getAllPosts = async function (req, res) {
       .limit(limit)
       .skip(skip);
 
-    if (!posts || posts.length === 0) res.status(404).json("no posts");
-    res.status(200).json({ status: "success", posts });
+    if (!posts || posts.length === 0)
+      return res.status(404).json({ status: "error", message: "no posts" });
+    return res.status(200).json({ status: "success", posts });
   } catch (error) {
-    console.log(error);
+    return res.status(500).json({ status: "error", message: "Error happened" });
   }
 };
 
 const createPost = async function (req, res) {
   try {
     const post = new postModel(req.body);
-    const user = await userModel.findOne({ email: req.currentUser.email });
-    post.author = user._id;
+    post.author = req.currentUser._id;
     await post.validate();
 
     await postModel.insertOne(post);
 
-    res.status(200).json(post);
+    res.status(200).json({ status: "success", data: post });
   } catch (error) {
-    console.log(error);
-    if (error.name === "ValidationError") res.status(403).json(error.message);
+    if (error.name === "ValidationError")
+      res.status(403).json({ status: "error", message: error.message });
 
-    res.status(500).json("Erorr happened");
+    res.status(500).json({ status: "error", message: "Error happened" });
   }
 };
 
 const updatePost = async function (req, res) {
   try {
     const post = await postModel.findById(req.query._id).populate("author");
-    if (!post) return res.status(404).json("post is not Found");
+    if (!post)
+      return res
+        .status(404)
+        .json({ status: "error", message: "post is not Found" });
 
     if (req.currentUser.email != post.author.email)
-      return res.status(403).json("you are not allowed to edit this post");
+      return res
+        .status(403)
+        .json({
+          status: "error",
+          message: "you are not allowed to edit this post",
+        });
 
     Object.assign(post, req.body);
     await post.save();
 
-    res.status(200).json({ status: "success", post });
+    res.status(200).json({ status: "success", data: post });
   } catch (error) {
     if (error.name === "ValidationError")
-      res.status(403).json({ error: error.message });
-    res.status(500).json("Error Happened");
+      res.status(403).json({ status: "error", message: error.message });
+    res.status(500).json({ status: "error", message: "Error Happened" });
   }
 };
 
@@ -73,7 +81,7 @@ const deletePost = async function (req, res) {
       .status(200)
       .json({ status: "success", message: "Post deleted successfully" });
   } catch (error) {
-    res.status(500).json("try again");
+    res.status(500).json({ status: "error", message: "try again" });
   }
 };
 

@@ -17,7 +17,7 @@ A user can :
 9- Filter posts by category [Done]
 6- Apply as an expert (category,Documents (pdf,jpg,links)) after verifying email [Done]
 7- search for expert or a post[Done] 
-8- View other users Profile 
+8- View other users Profile [Done]
 
  Nice to have:
 1- follow an expert 
@@ -41,3 +41,9 @@ An Admin can:
 
 Super Admin :
 Gets access to Add,delete admin roles with a Secret Key [Done]
+
+Additional:
+1- Code Refactoring 
+2- Unit testing 
+3- Redis Caching 
+4- Notification Feature (When someone comments or follows the user)
