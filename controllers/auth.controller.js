@@ -55,24 +55,19 @@ const sendVerificationCode = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
   try {
-    const model = await codeModel
-      .findOne({ email: req.currentUser.email })
-      .sort({ _id: -1 });
-    if (!model)
-      res
-        .status(403)
-        .json({ status: "error", message: "No code is requested!" });
+    const codeValidatorResult = await codeValidator(
+      req.body.code,
+      req.currentUser.email
+    );
 
-    if ((model.expiresAt - new Date().getTime()) / (1000 * 60) > 15)
-      res.status(403).json({ status: "error", message: "Code is expired" });
-    if (req.body.code !== model.code)
-      res
-        .status(403)
-        .json({ status: "error", message: "Code is not correct!" });
+    if (codeValidatorResult.status === "Invalid")
+      return res
+        .status(codeValidatorResult.statusCode)
+        .json({ status: "error", message: codeValidatorResult.message });
 
     await userModel
-      .findOne({ email: req.currentUser.email })
-      .updateOne({ isEmailVerified: true });
+      .findByIdAndUpdate(req.currentUser._id, { isEmailVerified: true })
+      .exec();
     res
       .status(200)
       .json({ status: "success", message: "Email is verified Successfully" });

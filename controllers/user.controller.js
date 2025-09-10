@@ -2,6 +2,7 @@ const uploadImage = require("../utils/uploadImage");
 const userModel = require("../models/user.model");
 const codeModel = require("../models/code.model");
 const expertApplicationModel = require("../models/expertApplication.model");
+const codeValidator = require("../utils/codeValidator");
 
 const setProfilePicture = async function (req, res) {
   try {
@@ -18,12 +19,10 @@ const setProfilePicture = async function (req, res) {
       { $set: { pfp_url: picture_url } }
     );
 
-    res
-      .status(200)
-      .json({
-        status: "success",
-        message: `picture uploaded successfully url:${picture_url}`,
-      });
+    res.status(200).json({
+      status: "success",
+      message: `picture uploaded successfully url:${picture_url}`,
+    });
   } catch (error) {
     console.log(error);
     res.json({ status: "error", message: "photo not uploaded" });
@@ -47,21 +46,17 @@ const changeName = async function (req, res) {
 
 const resetPassword = async function (req, res) {
   try {
-    const model = await codeModel
-      .findOne({ email: req.currentUser.email })
-      .sort({ _id: -1 });
-    if (!model)
-      res
-        .status(403)
-        .json({ status: "error", message: "No code is requested!" });
-    if ((model.expiresAt - new Date().getTime()) / (1000 * 60) > 15)
-      res.status(403).json({ status: "error", message: "Code is expired" });
-    if (req.body.code !== model.code)
-      res
-        .status(403)
-        .json({ status: "error", message: "Code is not correct!" });
-    const user = await userModel.findById(req.currentUser._id);
+    const codeValidatorResult = await codeValidator(
+      req.body.code,
+      req.currentUser.email
+    );
 
+    if (codeValidatorResult.status === "Invalid")
+      return res
+        .status(codeValidatorResult.statusCode)
+        .json({ status: "error", message: codeValidatorResult.message });
+
+    const user = await userModel.findById(req.currentUser._id);
     if (user.password === req.body.newPassword)
       res
         .status(403)
@@ -84,12 +79,10 @@ const applyAsExpert = async function (req, res) {
         .json({ status: "error", message: "Upload at least one file" });
 
     if (!req.body.category || req.body.category === "") {
-      return res
-        .status(403)
-        .json({
-          status: "error",
-          message: "category Field cannot be left empty",
-        });
+      return res.status(403).json({
+        status: "error",
+        message: "category Field cannot be left empty",
+      });
     }
 
     // upload files to cloudinary + add their links to array
