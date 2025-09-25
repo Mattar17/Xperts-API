@@ -1,7 +1,7 @@
-const { getAllPosts } = require("../controllers/post.controller");
-const postModel = require("../models/post.model");
+const { getAllPosts } = require("../../controllers/post.controller");
+const postModel = require("../../models/post.model");
 
-jest.mock("../models/post.model");
+jest.mock("../../models/post.model");
 
 let mockRequest = {
   query: { page: 2, filter: "" },

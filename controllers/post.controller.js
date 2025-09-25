@@ -1,5 +1,4 @@
 const postModel = require("../models/post.model");
-const userModel = require("../models/user.model");
 
 const getAllPosts = async function (req, res) {
   try {
@@ -50,12 +49,10 @@ const updatePost = async function (req, res) {
         .json({ status: "error", message: "post is not Found" });
 
     if (req.currentUser.email != post.author.email)
-      return res
-        .status(403)
-        .json({
-          status: "error",
-          message: "you are not allowed to edit this post",
-        });
+      return res.status(403).json({
+        status: "error",
+        message: "you are not allowed to edit this post",
+      });
 
     Object.assign(post, req.body);
     await post.save();
