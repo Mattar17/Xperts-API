@@ -1,6 +1,5 @@
 const uploadImage = require("../utils/uploadImage");
 const userModel = require("../models/user.model");
-const codeModel = require("../models/code.model");
 const expertApplicationModel = require("../models/expertApplication.model");
 const codeValidator = require("../utils/codeValidator");
 

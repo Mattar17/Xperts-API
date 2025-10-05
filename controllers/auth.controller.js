@@ -1,7 +1,5 @@
 const userModel = require("../models/user.model");
-const jwt = require("jsonwebtoken");
 const mailSender = require("../utils/emailSender");
-const codeModel = require("../models/code.model");
 const generateToken = require("../services/tokenGenerator");
 
 const Login = async (req, res) => {
