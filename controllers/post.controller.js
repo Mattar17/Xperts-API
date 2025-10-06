@@ -3,7 +3,7 @@ const postModel = require("../models/post.model");
 const getAllPosts = async function (req, res) {
   try {
     const page = req.query.page || 1;
-    const limit = 15;
+    const limit = 10;
     const skip = (+page - 1) * limit;
     const categoryFilter = req.query.filter;
     const query = categoryFilter ? { category: categoryFilter } : {};
