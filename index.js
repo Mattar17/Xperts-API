@@ -14,14 +14,17 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors(corsOptions));
 
-mongoose
-  .connect(process.env.DEV_CONNECTION_STRING)
-  .then(() => {
-    console.log("mongoose server started");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+if (!global._mongooseConnected) {
+  mongoose
+    .connect(process.env.DEV_CONNECTION_STRING)
+    .then(() => {
+      console.log("mongoose server started");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  global._mongooseConnected = true;
+}
 
 app.use("/", appRouter);
 app.use((req, res, next) => {
