@@ -19,12 +19,10 @@ const getAllPosts = async function (req, res) {
       return res.status(404).json({ status: "error", message: "no posts" });
     return res.status(200).json({ status: "success", posts });
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        status: "error",
-        message: "Error happened while fetching posts",
-      });
+    return res.status(500).json({
+      status: "error",
+      message: "Error happened while fetching posts",
+    });
   }
 };
 

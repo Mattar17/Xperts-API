@@ -1,6 +1,7 @@
 const userModel = require("../models/user.model");
 const mailSender = require("../utils/emailSender");
 const generateToken = require("../services/tokenGenerator");
+const codeValidator = require("../utils/codeValidator");
 
 const Login = async (req, res) => {
   const { email, password } = req.body;
