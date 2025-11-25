@@ -8,9 +8,10 @@ const generateToken = (user) => {
       name: user.name,
       isAdmin: user.isAdmin,
       isEmailVerified: user.isEmailVerified,
+      pfp_url: user.pfp_url,
     },
     process.env.JWT_PRIVATE_KEY,
-    { expiresIn: "2d" }
+    { expiresIn: "7d" }
   );
 };
 

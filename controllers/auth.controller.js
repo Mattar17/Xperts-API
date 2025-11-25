@@ -53,19 +53,23 @@ const sendVerificationCode = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
   try {
+    console.log("!!!!!!!!");
     const codeValidatorResult = await codeValidator(
       req.body.code,
       req.currentUser.email
     );
 
+    console.log("!!!!!!");
+
     if (codeValidatorResult.status === "Invalid")
       return res
         .status(codeValidatorResult.statusCode)
         .json({ status: "error", message: codeValidatorResult.message });
-
+    console.log("!!!!!!!!!!!");
     await userModel
       .findByIdAndUpdate(req.currentUser._id, { isEmailVerified: true })
       .exec();
+    console.log(req.currentUser);
     res
       .status(200)
       .json({ status: "success", message: "Email is verified Successfully" });

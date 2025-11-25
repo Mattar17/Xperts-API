@@ -3,10 +3,10 @@ const {
   createPost,
   updatePost,
   deletePost,
-} = require("../controllers/post.controller");
-const postModel = require("../models/post.model");
+} = require("../../controllers/post.controller");
+const postModel = require("../../models/post.model");
 
-jest.mock("../models/post.model");
+jest.mock("../../models/post.model");
 
 let mockResponse;
 let mockRequest;

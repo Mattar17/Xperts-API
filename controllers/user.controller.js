@@ -5,7 +5,10 @@ const codeValidator = require("../utils/codeValidator");
 
 const setProfilePicture = async function (req, res) {
   try {
-    if (!req.file) res.json({ status: "error", message: "file is required" });
+    if (!req.file)
+      return res
+        .status(400)
+        .json({ status: "error", message: "file is required" });
 
     const picture_url = await uploadImage.uploadImage(
       req.file.buffer,
@@ -24,13 +27,16 @@ const setProfilePicture = async function (req, res) {
     });
   } catch (error) {
     console.log(error);
-    res.json({ status: "error", message: "photo not uploaded" });
+    res.status(500).json({ status: "error", message: "photo not uploaded" });
   }
 };
 
 const changeName = async function (req, res) {
   try {
-    if (req.body.newName.length < 4) res.status(403).json("name is too short");
+    if (req.body.newName.length < 4)
+      return res
+        .status(403)
+        .json({ status: "error", message: "Name is too short" });
     await userModel.updateOne(
       { email: req.currentUser.email },
       { $set: { name: req.body.newName } }

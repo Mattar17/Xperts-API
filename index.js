@@ -10,9 +10,9 @@ const corsOptions = {
 };
 
 const app = express();
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded());
-app.use(cors(corsOptions));
 
 if (!global._mongooseConnected) {
   mongoose
