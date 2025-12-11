@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const appRouter = require("./routers/app.router");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
+const cron = require("node-cron");
 
 const corsOptions = {
   origin: "*",
@@ -20,6 +21,10 @@ app.use(limiter);
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded());
+
+cron.schedule("*/5 * * * *", () => {
+  console.log("Running the cron job every 5 minutes");
+});
 
 if (!global._mongooseConnected) {
   mongoose
