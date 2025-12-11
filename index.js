@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const appRouter = require("./routers/app.router");
 const cors = require("cors");
+const rateLimit = require("express-rate-limit");
 
 const corsOptions = {
   origin: "*",
@@ -10,6 +11,12 @@ const corsOptions = {
 };
 
 const app = express();
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 100,
+  message: "too many requests, please try again!!",
+});
+app.use(limiter);
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded());

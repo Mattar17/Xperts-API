@@ -12,6 +12,7 @@ const getAllPosts = async function (req, res) {
       .find(query)
       .populate("author", "name pfp_url")
       .populate("comments.author", "name pfp_url creationDate")
+      .sort({ creationDate: -1 })
       .limit(limit)
       .skip(skip);
 
