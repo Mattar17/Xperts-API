@@ -16,6 +16,7 @@ const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 100,
   message: "too many requests, please try again!!",
+  validate: { trustProxy: true },
 });
 app.use(limiter);
 app.use(cors(corsOptions));
