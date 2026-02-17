@@ -17,6 +17,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  bio: {
+    type: String,
+    maxLength: [200, "Bio is too long"],
+    minLength: [10, "Bio is too short"],
+    default: "User of Xperts website",
+  },
   pfp_url: {
     type: String,
     default: "",

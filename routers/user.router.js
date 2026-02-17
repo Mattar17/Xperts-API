@@ -10,7 +10,7 @@ router.patch(
   uploadFile.upload.single("picture"),
   userController.setProfilePicture
 );
-router.patch("/change-name", authenticate, userController.changeName);
+router.patch("/update_user", authenticate, userController.updateUserInfo);
 router.patch("/reset-password", authenticate, userController.resetPassword);
 router.post(
   "/expert-application",

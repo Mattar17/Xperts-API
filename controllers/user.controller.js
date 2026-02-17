@@ -23,7 +23,8 @@ const setProfilePicture = async function (req, res) {
 
     res.status(200).json({
       status: "success",
-      message: `picture uploaded successfully url:${picture_url}`,
+      message: `picture uploaded successfully`,
+      data: picture_url,
     });
   } catch (error) {
     console.log(error);
@@ -31,21 +32,36 @@ const setProfilePicture = async function (req, res) {
   }
 };
 
-const changeName = async function (req, res) {
+const updateUserInfo = async function (req, res) {
   try {
-    if (req.body.newName.length < 4)
+    if (
+      (req.body.name && req.body.name.length < 4) ||
+      (req.body.bio && req.body.bio.length < 10)
+    )
       return res
         .status(403)
-        .json({ status: "error", message: "Name is too short" });
-    await userModel.updateOne(
-      { email: req.currentUser.email },
-      { $set: { name: req.body.newName } }
-    );
-    res.status(200).json({ status: "success", message: "Name is updated" });
+        .json({ status: "error", message: "Name or Bio is too short" });
+
+    const updatedInfo = {};
+    if (req.body.name !== undefined) updatedInfo.name = req.body.name;
+    if (req.body.bio !== undefined) updatedInfo.bio = req.body.bio;
+
+    const updatedUser = await userModel
+      .findByIdAndUpdate(req.currentUser._id, updatedInfo, {
+        new: true,
+        runValidators: true,
+      })
+      .select("name bio");
+    res.status(200).json({
+      status: "success",
+      message: "User info is updated",
+      data: updatedUser,
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ status: "error", message: "Error happened please try again!!" });
+    res.status(500).json({
+      status: "error",
+      message: "Error happened please try again (Update user error)!!",
+    });
   }
 };
 
@@ -144,7 +160,7 @@ const viewUserProfile = async function (req, res) {
 
 module.exports = {
   setProfilePicture,
-  changeName,
+  updateUserInfo,
   resetPassword,
   applyAsExpert,
   searchForUser,
