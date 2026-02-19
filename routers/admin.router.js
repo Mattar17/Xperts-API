@@ -9,21 +9,26 @@ router.get(
   "/experts-applications",
   authenticate,
   adminOnly,
-  adminController.getExpertsApplication
+  adminController.getExpertsApplication,
 );
 router.get("/users", authenticate, adminOnly, adminController.getAllUsers);
 router.put(
-  "/accept-application",
+  "/experts-applications/:application_id",
   authenticate,
   adminOnly,
-  adminController.acceptApplication
+  adminController.acceptApplication,
 );
-router.delete("/users", authenticate, adminOnly, adminController.deleteUser);
+router.delete(
+  "/users/:_id",
+  authenticate,
+  adminOnly,
+  adminController.deleteUser,
+);
 router.patch(
-  "/toggle-admin",
+  "/toggle-admin/:_id",
   authenticate,
   hasSuperAdminKey,
-  adminController.toggleAdminRole
+  adminController.toggleAdminRole,
 );
 
 module.exports = router;

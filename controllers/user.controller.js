@@ -10,15 +10,22 @@ const setProfilePicture = async function (req, res) {
         .status(400)
         .json({ status: "error", message: "file is required" });
 
+    const fileTypes = ["image/jpeg", "image/png", "image/jpg"];
+    if (!fileTypes.includes(req.file.mimetype))
+      return res.status(400).json({
+        status: "error",
+        message: "invalid file type, only jpeg, jpg and png are allowed",
+      });
+
     const picture_url = await uploadImage.uploadImage(
       req.file.buffer,
       req.file.mimetype,
-      "Xperts/user_pictures"
+      "Xperts/user_pictures",
     );
 
     await userModel.updateOne(
       { email: req.currentUser.email },
-      { $set: { pfp_url: picture_url } }
+      { $set: { pfp_url: picture_url } },
     );
 
     res.status(200).json({
@@ -69,7 +76,7 @@ const resetPassword = async function (req, res) {
   try {
     const codeValidatorResult = await codeValidator(
       req.body.code,
-      req.currentUser.email
+      req.currentUser.email,
     );
 
     if (codeValidatorResult.status === "Invalid")
@@ -109,8 +116,8 @@ const applyAsExpert = async function (req, res) {
     // upload files to cloudinary + add their links to array
     const documentLinks = await Promise.all(
       req.files.map((f) =>
-        uploadImage.uploadImage(f.buffer, f.mimetype, "Xperts/documents")
-      )
+        uploadImage.uploadImage(f.buffer, f.mimetype, "Xperts/documents"),
+      ),
     );
 
     const user = await userModel.findById(req.currentUser._id);

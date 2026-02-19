@@ -6,27 +6,25 @@ const postController = require("../controllers/post.controller");
 const commentController = require("../controllers/comment.controller");
 
 router.get("/", postController.getAllPosts);
+router.post("/", authenticate, isEmailVerified, postController.createPost);
+router.patch("/:id", authenticate, isEmailVerified, postController.updatePost);
+router.delete("/:id", authenticate, isEmailVerified, postController.deletePost);
+
+router.get("/:post_id/comments", commentController.getComments);
 router.post(
-  "/create-post",
+  "/:post_id/comments",
   authenticate,
-  isEmailVerified,
-  postController.createPost
+  commentController.createComment,
 );
 router.patch(
-  "/update-post",
+  "/:post_id/comments/:comment_id",
   authenticate,
-  isEmailVerified,
-  postController.updatePost
+  commentController.updateComment,
 );
 router.delete(
-  "/delete-post",
+  "/:post_id/comments/:comment_id",
   authenticate,
-  isEmailVerified,
-  postController.deletePost
+  commentController.deleteComment,
 );
-router.get("/comments", commentController.getComments);
-router.post("/comments", authenticate, commentController.createComment);
-router.patch("/comments", authenticate, commentController.updateComment);
-router.delete("/comments", authenticate, commentController.deleteComment);
 
 module.exports = router;

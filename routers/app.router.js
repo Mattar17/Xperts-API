@@ -6,7 +6,9 @@ const postRouter = require("./post.router");
 const adminRouter = require("./admin.router");
 const apiKeyValidator = require("../middlewares/validateApiKey");
 
-router.use(apiKeyValidator);
+if (process.env.NODE_ENV === "production") {
+  router.use(apiKeyValidator);
+}
 
 router.use("/api/auth", authRouter);
 router.use("/api/user", userRouter);

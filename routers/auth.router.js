@@ -10,7 +10,7 @@ router.post("/register", authController.Register);
 router.post(
   "/send-verification-code",
   authenticate,
-  authController.sendVerificationCode
+  authController.sendVerificationCode,
 );
 
 router.patch("/verify-email", authenticate, authController.verifyEmail);

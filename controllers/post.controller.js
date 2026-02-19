@@ -46,7 +46,7 @@ const createPost = async function (req, res) {
 
 const updatePost = async function (req, res) {
   try {
-    const post = await postModel.findById(req.query._id).populate("author");
+    const post = await postModel.findById(req.params.id).populate("author");
     if (!post)
       return res
         .status(404)
@@ -71,7 +71,7 @@ const updatePost = async function (req, res) {
 
 const deletePost = async function (req, res) {
   try {
-    const post = await postModel.findById(req.query._id).populate("author");
+    const post = await postModel.findById(req.params.id).populate("author");
     if (!post) return res.status(404).json("post is not Found");
 
     if (req.currentUser.email != post.author.email)

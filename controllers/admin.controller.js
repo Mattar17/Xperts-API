@@ -21,9 +21,10 @@ const getExpertsApplication = async function (req, res) {
 
 const acceptApplication = async function (req, res) {
   try {
-    const application = await expertApplicationModel.findById(
-      req.query.application_id
-    );
+    const { application_id } = req.params;
+    console.log(application_id);
+    const application = await expertApplicationModel.findById(application_id);
+    console.log("tried to find application");
     if (!application)
       return res.status(404).json({ status: "error", message: "Not Found" });
 
@@ -55,7 +56,8 @@ const getAllUsers = async function (req, res) {
 
 const deleteUser = async function (req, res) {
   try {
-    const user = await userModel.findById(req.query._id);
+    const { _id } = req.params;
+    const user = await userModel.findById(_id);
     if (!user)
       return res
         .status(404)
@@ -70,7 +72,8 @@ const deleteUser = async function (req, res) {
 
 const toggleAdminRole = async function (req, res) {
   try {
-    const user = await userModel.findById(req.query._id);
+    const { _id } = req.params;
+    const user = await userModel.findById(_id);
     if (!user)
       return res
         .status(404)
