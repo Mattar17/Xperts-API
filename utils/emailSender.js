@@ -25,7 +25,7 @@ const sendEmail = async (email) => {
     to: email,
     subject: "Hello",
     text: "Hello world?",
-    html: `<p>Your verification code is <em>${code}</em></p>`, // plain‑text body
+    html: `<p>Your verification code is <em>${code}</em></p>`,
   });
 };
 
