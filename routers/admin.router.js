@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const adminController = require("../controllers/admin.controller");
-const authenticate = require("../middlewares/authenticate");
-const adminOnly = require("../middlewares/adminOnly");
-const hasSuperAdminKey = require("../middlewares/hasSuperAdminKey");
+const adminController = require("../controllers/admin.controller.js");
+const authenticate = require("../middlewares/authenticate.js");
+const adminOnly = require("../middlewares/adminOnly.js");
+const hasSuperAdminKey = require("../middlewares/hasSuperAdminKey.js");
 
 router.get(
   "/experts-applications",

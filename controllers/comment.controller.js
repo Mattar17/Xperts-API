@@ -1,5 +1,5 @@
-const postModel = require("../models/post.model");
-const userModel = require("../models/user.model");
+const postModel = require("../models/post.model.js");
+const userModel = require("../models/user.model.js");
 
 const getComments = async function (req, res) {
   try {

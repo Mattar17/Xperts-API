@@ -3,8 +3,8 @@ const {
   createPost,
   updatePost,
   deletePost,
-} = require("../../controllers/post.controller");
-const postModel = require("../../models/post.model");
+} = require("../../controllers/post.controller.js");
+const postModel = require("../../models/post.model.js");
 
 jest.mock("../../models/post.model");
 

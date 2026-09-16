@@ -1,7 +1,7 @@
-const uploadImage = require("../utils/uploadImage");
-const userModel = require("../models/user.model");
-const expertApplicationModel = require("../models/expertApplication.model");
-const codeValidator = require("../utils/codeValidator");
+const uploadImage = require("../utils/uploadImage.js");
+const userModel = require("../models/user.model.js");
+const expertApplicationModel = require("../models/expertApplication.model.js");
+const codeValidator = require("../utils/codeValidator.js");
 
 const setProfilePicture = async function (req, res) {
   try {

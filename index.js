@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const appRouter = require("./routers/app.router");
+const appRouter = require("./routers/app.router.js");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 const cron = require("node-cron");

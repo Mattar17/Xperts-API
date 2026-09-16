@@ -5,10 +5,10 @@ const {
   applyAsExpert,
   searchForUser,
   viewUserProfile,
-} = require("../../controllers/user.controller");
-const userModel = require("../../models/user.model");
-const uploadFile = require("../../utils/uploadImage");
-const codeValidator = require("../../utils/codeValidator");
+} = require("../../controllers/user.controller.js");
+const userModel = require("../../models/user.model.js");
+const uploadFile = require("../../utils/uploadImage.js");
+const codeValidator = require("../../utils/codeValidator.js");
 
 const mockUserModel = jest.mock("../../models/user.model");
 console.log(mockUserModel);

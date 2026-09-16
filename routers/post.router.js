@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const authenticate = require("../middlewares/authenticate");
-const isEmailVerified = require("../middlewares/isEmailVerified");
-const postController = require("../controllers/post.controller");
-const commentController = require("../controllers/comment.controller");
+const authenticate = require("../middlewares/authenticate.js");
+const isEmailVerified = require("../middlewares/isEmailVerified.js");
+const postController = require("../controllers/post.controller.js");
+const commentController = require("../controllers/comment.controller.js");
 
 router.get("/", postController.getAllPosts);
 router.post("/", authenticate, isEmailVerified, postController.createPost);

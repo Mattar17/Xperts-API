@@ -1,4 +1,4 @@
-const codeModel = require("../models/code.model");
+const codeModel = require("../models/code.model.js");
 
 const codeValidator = async function (code, userEmail) {
   const model = await codeModel.findOne({ email: userEmail }).sort({ _id: -1 });

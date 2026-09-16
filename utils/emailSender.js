@@ -1,5 +1,5 @@
 const mailer = require("nodemailer");
-const codeModel = require("../models/code.model");
+const codeModel = require("../models/code.model.js");
 
 const transporter = mailer.createTransport({
   host: "smtp.gmail.com",

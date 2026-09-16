@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const fields = require("../utils/fields");
+const fields = require("../utils/fields.js");
 
 const userSchema = new mongoose.Schema({
   email: {

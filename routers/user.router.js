@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const userController = require("../controllers/user.controller");
-const uploadFile = require("../utils/uploadImage");
-const authenticate = require("../middlewares/authenticate");
+const userController = require("../controllers/user.controller.js");
+const uploadFile = require("../utils/uploadImage.js");
+const authenticate = require("../middlewares/authenticate.js");
 
 router.patch(
   "/set-profile-picture",

@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const authRouter = require("./auth.router");
-const userRouter = require("./user.router");
-const postRouter = require("./post.router");
-const adminRouter = require("./admin.router");
-const apiKeyValidator = require("../middlewares/validateApiKey");
+const authRouter = require("./auth.router.js");
+const userRouter = require("./user.router.js");
+const postRouter = require("./post.router.js");
+const adminRouter = require("./admin.router.js");
+const apiKeyValidator = require("../middlewares/validateApiKey.js");
 
 if (process.env.NODE_ENV === "production") {
   router.use(apiKeyValidator);
