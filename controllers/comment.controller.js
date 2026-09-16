@@ -1,5 +1,6 @@
 const postModel = require("../models/post.model.js");
 const userModel = require("../models/user.model.js");
+const logger = require("../utils/logger.js");
 
 const getComments = async function (req, res) {
   try {
@@ -18,6 +19,7 @@ const getComments = async function (req, res) {
 
     return res.status(200).json({ status: "success", data: comments });
   } catch (error) {
+    logger.error("Error fetching comments for post %s: %s", req.params?.post_id, error.message, { stack: error.stack });
     res.status(500).json({
       status: "error",
       message: "Error Happened while fetching comments",
@@ -47,6 +49,7 @@ const createComment = async function (req, res) {
       .populate("comments.author");
     return res.status(200).json({ status: "success", data: updatedPost });
   } catch (error) {
+    logger.error("Error creating comment on post %s: %s", req.params?.post_id, error.message, { stack: error.stack });
     return res
       .status(500)
       .json({ status: "error", message: "Error while adding the comment" });
@@ -79,6 +82,7 @@ const updateComment = async function (req, res) {
       .status(200)
       .json({ status: "success", message: "Comment updated successfully" });
   } catch (error) {
+    logger.error("Error updating comment %s on post %s: %s", req.params?.comment_id, req.params?.post_id, error.message, { stack: error.stack });
     return res
       .status(500)
       .json({ status: "error", message: "Error while updating the comment" });
@@ -110,6 +114,7 @@ const deleteComment = async function (req, res) {
       .status(200)
       .json({ status: "success", message: "Comment deleted successfully" });
   } catch (error) {
+    logger.error("Error deleting comment %s on post %s: %s", req.params?.comment_id, req.params?.post_id, error.message, { stack: error.stack });
     return res
       .status(500)
       .json({ status: "error", message: "Error while deleting the comment" });

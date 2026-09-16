@@ -2,6 +2,7 @@ const userModel = require("../models/user.model.js");
 const mailSender = require("../utils/emailSender.js");
 const generateToken = require("../services/tokenGenerator.js");
 const codeValidator = require("../utils/codeValidator.js");
+const logger = require("../utils/logger.js");
 
 const Login = async (req, res) => {
   const { email, password } = req.body;
@@ -26,6 +27,7 @@ const Login = async (req, res) => {
     const token = generateToken(user);
     return res.status(200).json({ status: "success", token });
   } catch (error) {
+    logger.error("Error during login for %s: %s", req.body?.email, error.message, { stack: error.stack });
     return res.status(500).json({ status: "error", message: "Server Error" });
   }
 };
@@ -39,6 +41,7 @@ const Register = async (req, res) => {
     await userModel.insertOne(newUser);
     res.status(200).json({ status: "success", data: newUser });
   } catch (error) {
+    logger.error("Error during registration for %s: %s", req.body?.email, error.message, { stack: error.stack });
     res.status(500).json({ status: "error", message: "Server Error" });
   }
 };
@@ -48,6 +51,7 @@ const sendVerificationCode = async (req, res) => {
     await mailSender(req.currentUser.email);
     res.status(200).json({ status: "success", message: "Code sent" });
   } catch (error) {
+    logger.error("Error sending verification code to %s: %s", req.currentUser?.email, error.message, { stack: error.stack });
     res.status(500).json({ status: "error", message: "please try again" });
   }
 };
@@ -75,6 +79,7 @@ const verifyEmail = async (req, res) => {
       .status(200)
       .json({ status: "success", message: "Email is verified Successfully" });
   } catch (error) {
+    logger.error("Error during verifyEmail for %s: %s", req.currentUser?.email, error.message, { stack: error.stack });
     res.status(500).json({ status: "error", message: "Server Error" });
   }
 };

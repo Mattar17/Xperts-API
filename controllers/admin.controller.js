@@ -1,5 +1,6 @@
 const expertApplicationModel = require("../models/expertApplication.model.js");
 const userModel = require("../models/user.model.js");
+const logger = require("../utils/logger.js");
 
 const getExpertsApplication = async function (req, res) {
   try {
@@ -14,6 +15,7 @@ const getExpertsApplication = async function (req, res) {
 
     return res.status(200).json({ status: "success", data: applications });
   } catch (error) {
+    logger.error("Error fetching expert applications: %s", error.message, { stack: error.stack });
     return res
       .status(500)
       .json({ status: "error", message: "Error fetching applications" });
@@ -47,6 +49,7 @@ const acceptApplication = async function (req, res) {
       .status(200)
       .json({ status: "success", message: "Application Accepted" });
   } catch (error) {
+    logger.error("Error accepting application: %s", error.message, { stack: error.stack });
     return res
       .status(500)
       .json({ status: "error", message: "Error accepting application" });
@@ -64,6 +67,7 @@ const getAllUsers = async function (req, res) {
 
     return res.status(200).json({ status: "success", data: users });
   } catch (error) {
+    logger.error("Error fetching all users: %s", error.message, { stack: error.stack });
     return res.status(500).json({ status: "error", message: "Server error" });
   }
 };
@@ -81,6 +85,7 @@ const deleteUser = async function (req, res) {
     await user.deleteOne();
     return res.status(200).json({ status: "success", message: "user deleted" });
   } catch (error) {
+    logger.error("Error deleting user with ID %s: %s", req.params._id, error.message, { stack: error.stack });
     return res.status(500).json({ status: "error", message: "server Error" });
   }
 };
@@ -105,6 +110,7 @@ const toggleAdminRole = async function (req, res) {
         : "user is back to normal user",
     });
   } catch (error) {
+    logger.error("Error toggling admin role for user ID %s: %s", req.params._id, error.message, { stack: error.stack });
     return res.status(500).json({ status: "fail", message: "server error" });
   }
 };

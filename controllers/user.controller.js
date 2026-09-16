@@ -2,6 +2,7 @@ const uploadImage = require("../utils/uploadImage.js");
 const userModel = require("../models/user.model.js");
 const expertApplicationModel = require("../models/expertApplication.model.js");
 const codeValidator = require("../utils/codeValidator.js");
+const logger = require("../utils/logger.js");
 
 const setProfilePicture = async function (req, res) {
   try {
@@ -34,7 +35,7 @@ const setProfilePicture = async function (req, res) {
       data: picture_url,
     });
   } catch (error) {
-    console.log(error);
+    logger.error("Error setting profile picture for %s: %s", req.currentUser?.email, error.message, { stack: error.stack });
     res.status(500).json({ status: "error", message: "photo not uploaded" });
   }
 };
@@ -65,6 +66,7 @@ const updateUserInfo = async function (req, res) {
       data: updatedUser,
     });
   } catch (error) {
+    logger.error("Error updating user info for %s: %s", req.currentUser?._id, error.message, { stack: error.stack });
     res.status(500).json({
       status: "error",
       message: "Error happened please try again (Update user error)!!",
@@ -94,6 +96,7 @@ const resetPassword = async function (req, res) {
 
     res.status(200).json({ status: "success", message: "password Changed" });
   } catch (error) {
+    logger.error("Error resetting password for %s: %s", req.currentUser?._id, error.message, { stack: error.stack });
     res.status(500).json({ status: "error", message: "Try Again!!" });
   }
 };
@@ -131,21 +134,27 @@ const applyAsExpert = async function (req, res) {
       .status(200)
       .json({ status: "success", documents: documentLinks });
   } catch (error) {
+    logger.error("Error applying as expert for %s: %s", req.currentUser?._id, error.message, { stack: error.stack });
     if (error.name === "ValidationError")
-      res.status(403).json({ status: "error", message: error.message });
-    res
+      return res.status(403).json({ status: "error", message: error.message });
+    return res
       .status(500)
       .json({ status: "error", message: "Error Happened in server" });
   }
 };
 
 const searchForUser = async function (req, res) {
-  const user = await userModel.find({
-    name: { $regex: new RegExp(`^${req.query.name}`) },
-  });
-  if (!user || user.length === 0)
-    return res.json({ status: "error", message: "no user found" });
-  return res.status(200).json({ status: "success", data: user });
+  try {
+    const user = await userModel.find({
+      name: { $regex: new RegExp(`^${req.query.name}`) },
+    });
+    if (!user || user.length === 0)
+      return res.json({ status: "error", message: "no user found" });
+    return res.status(200).json({ status: "success", data: user });
+  } catch (error) {
+    logger.error("Error searching for user with query %s: %s", req.query?.name, error.message, { stack: error.stack });
+    return res.status(500).json({ status: "error", message: "Error searching for user" });
+  }
 };
 
 const viewUserProfile = async function (req, res) {
@@ -159,6 +168,7 @@ const viewUserProfile = async function (req, res) {
         .json({ status: "error", message: "User not found" });
     return res.status(200).json({ status: "success", data: user });
   } catch (error) {
+    logger.error("Error viewing user profile for ID %s: %s", req.params?.id, error.message, { stack: error.stack });
     return res
       .status(500)
       .json({ status: "error", message: "Error Happened in server" });

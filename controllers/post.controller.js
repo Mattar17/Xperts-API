@@ -1,4 +1,5 @@
 const postModel = require("../models/post.model.js");
+const logger = require("../utils/logger.js");
 
 const getAllPosts = async function (req, res) {
   try {
@@ -20,6 +21,7 @@ const getAllPosts = async function (req, res) {
       return res.status(404).json({ status: "error", message: "no posts" });
     return res.status(200).json({ status: "success", posts });
   } catch (error) {
+    logger.error("Error fetching posts: %s", error.message, { stack: error.stack });
     return res.status(500).json({
       status: "error",
       message: "Error happened while fetching posts",
@@ -37,10 +39,11 @@ const createPost = async function (req, res) {
 
     res.status(200).json({ status: "success", data: post });
   } catch (error) {
+    logger.error("Error creating post: %s", error.message, { stack: error.stack });
     if (error.name === "ValidationError")
-      res.status(403).json({ status: "error", message: error.message });
+      return res.status(403).json({ status: "error", message: error.message });
 
-    res.status(500).json({ status: "error", message: "Error happened" });
+    return res.status(500).json({ status: "error", message: "Error happened" });
   }
 };
 
@@ -63,9 +66,10 @@ const updatePost = async function (req, res) {
 
     res.status(200).json({ status: "success", data: post });
   } catch (error) {
+    logger.error("Error updating post %s: %s", req.params?.id, error.message, { stack: error.stack });
     if (error.name === "ValidationError")
-      res.status(403).json({ status: "error", message: error.message });
-    res.status(500).json({ status: "error", message: "Error Happened" });
+      return res.status(403).json({ status: "error", message: error.message });
+    return res.status(500).json({ status: "error", message: "Error Happened" });
   }
 };
 
@@ -82,7 +86,8 @@ const deletePost = async function (req, res) {
       .status(200)
       .json({ status: "success", message: "Post deleted successfully" });
   } catch (error) {
-    res.status(500).json({ status: "error", message: "try again" });
+    logger.error("Error deleting post %s: %s", req.params?.id, error.message, { stack: error.stack });
+    return res.status(500).json({ status: "error", message: "try again" });
   }
 };
 
