@@ -1,3 +1,4 @@
+require("dotenv").config();
 const cloudinary = require("cloudinary").v2;
 const multer = require("multer");
 
@@ -38,7 +39,8 @@ const uploadImage = async function (buffer, mimetype, folder) {
     });
     return result.secure_url;
   } catch (error) {
-    console.log(error);
+    console.error("Cloudinary upload error:", error);
+    throw error;
   }
 };
 
