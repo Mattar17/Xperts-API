@@ -12,7 +12,10 @@ const getAllPosts = async function (req, res) {
     const posts = await postModel
       .find(query)
       .populate("author", "name pfp_url")
-      .populate("comments.author", "name pfp_url creationDate")
+      .populate({
+        path: "comments",
+        populate: { path: "author", select: "name pfp_url creationDate" },
+      })
       .sort({ creationDate: -1 })
       .limit(limit)
       .skip(skip);
