@@ -1,4 +1,5 @@
 const postModel = require("../models/post.model.js");
+const commentModel = require("../models/comment.model.js");
 const logger = require("../utils/logger.js");
 
 const getAllPosts = async function (req, res) {
@@ -52,24 +53,41 @@ const createPost = async function (req, res) {
 
 const updatePost = async function (req, res) {
   try {
-    const post = await postModel.findById(req.params.id).populate("author");
+    const postId = req.params?.id || req.query?._id || req.params?.post_id;
+    const post = await postModel.findById(postId).populate("author");
     if (!post)
       return res
         .status(404)
         .json({ status: "error", message: "post is not Found" });
 
-    if (req.currentUser.email != post.author.email)
+    const authorEmail = post.author?.email;
+    const authorId = post.author?._id
+      ? post.author._id.toString()
+      : post.author
+      ? post.author.toString()
+      : null;
+    const currentUserId = req.currentUser?._id ? req.currentUser._id.toString() : "";
+    const currentUserEmail = req.currentUser?.email;
+
+    const isOwner =
+      (authorEmail && currentUserEmail && authorEmail === currentUserEmail) ||
+      (authorId && currentUserId && authorId === currentUserId) ||
+      req.currentUser?.isAdmin;
+
+    if (!isOwner)
       return res.status(403).json({
         status: "error",
         message: "you are not allowed to edit this post",
       });
 
-    Object.assign(post, req.body);
+    if (req.body.title !== undefined) post.title = req.body.title;
+    if (req.body.content !== undefined) post.content = req.body.content;
+    if (req.body.category !== undefined) post.category = req.body.category;
     await post.save();
 
     res.status(200).json({ status: "success", data: post });
   } catch (error) {
-    logger.error("Error updating post %s: %s", req.params?.id, error.message, { stack: error.stack });
+    logger.error("Error updating post %s: %s", req.params?.id || req.query?._id, error.message, { stack: error.stack });
     if (error.name === "ValidationError")
       return res.status(403).json({ status: "error", message: error.message });
     return res.status(500).json({ status: "error", message: "Error Happened" });
@@ -78,18 +96,46 @@ const updatePost = async function (req, res) {
 
 const deletePost = async function (req, res) {
   try {
-    const post = await postModel.findById(req.params.id).populate("author");
-    if (!post) return res.status(404).json("post is not Found");
+    const postId = req.params?.id || req.query?._id || req.params?.post_id;
+    const post = await postModel.findById(postId).populate("author");
+    if (!post)
+      return res
+        .status(404)
+        .json({ status: "error", message: "post is not Found" });
 
-    if (req.currentUser.email != post.author.email)
-      return res.status(403).json("you are not allowed to delete this post");
+    const authorEmail = post.author?.email;
+    const authorId = post.author?._id
+      ? post.author._id.toString()
+      : post.author
+      ? post.author.toString()
+      : null;
+    const currentUserId = req.currentUser?._id ? req.currentUser._id.toString() : "";
+    const currentUserEmail = req.currentUser?.email;
+
+    const isOwner =
+      (authorEmail && currentUserEmail && authorEmail === currentUserEmail) ||
+      (authorId && currentUserId && authorId === currentUserId) ||
+      req.currentUser?.isAdmin;
+
+    if (!isOwner)
+      return res
+        .status(403)
+        .json({ status: "error", message: "you are not allowed to delete this post" });
 
     await post.deleteOne();
+    try {
+      if (commentModel && typeof commentModel.deleteMany === "function") {
+        await commentModel.deleteMany({ post_id: post._id });
+      }
+    } catch (commentErr) {
+      logger.warn("Could not cascade delete comments for post %s: %s", postId, commentErr.message);
+    }
+
     res
       .status(200)
       .json({ status: "success", message: "Post deleted successfully" });
   } catch (error) {
-    logger.error("Error deleting post %s: %s", req.params?.id, error.message, { stack: error.stack });
+    logger.error("Error deleting post %s: %s", req.params?.id || req.query?._id, error.message, { stack: error.stack });
     return res.status(500).json({ status: "error", message: "try again" });
   }
 };
