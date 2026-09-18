@@ -8,6 +8,7 @@ const commentController = require("../controllers/comment.controller.js");
 router.get("/", postController.getAllPosts);
 router.post("/", authenticate, isEmailVerified, postController.createPost);
 router.patch("/:id", authenticate, isEmailVerified, postController.updatePost);
+router.put("/:id", authenticate, isEmailVerified, postController.updatePost);
 router.delete("/:id", authenticate, isEmailVerified, postController.deletePost);
 
 router.get("/:post_id/comments", commentController.getComments);
